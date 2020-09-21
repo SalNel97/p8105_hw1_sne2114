@@ -4,5 +4,78 @@ author: Salah El-Sadek
 output: github_document
 ---
 
-Homework 1 Solution 
+Homework 1 Solution.
+
+```{r}
+library(tidyverse)
+```
+
+
+# Question 1
+
+Creating the data frame.
+
+```{r create_df}
+q1_df =
+  tibble(
+    samp = rnorm(10),
+    samp_gt_0 = samp > 0,
+    char_vec = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"),
+    factor_vec = factor(c("low", "low", "low", "mod", "mod", "mod", "mod", "high", "high", "high"))
+  )
+```
+
+Taking the mean of each variable in the data frame.
+
+```{r mean_pull}
+mean(pull(q1_df, samp))
+mean(pull(q1_df, samp_gt_0))
+mean(pull(q1_df, char_vec))
+mean(pull(q1_df, factor_vec))
+```
+
+I can take the mean of numbers or logical, but not of characters and factors.
+
+```{r convert_numeric}
+as.numeric(pull(q1_df, samp))
+as.numeric(pull(q1_df, samp_gt_0))
+as.numeric(pull(q1_df, char_vec))
+as.numeric(pull(q1_df, factor_vec))
+```
+
+I can change factors and logical into numerical, but not characters.
+
+```{r multiplying}
+as.numeric(pull(q1_df, samp_gt_0)) * pull(q1_df, samp)
+as.factor(pull(q1_df, samp_gt_0)) * pull(q1_df, samp)
+as.numeric(as.factor(pull(q1_df, samp_gt_0))) * pull(q1_df, samp)
+```
+
+It seems that you cannot multiply factors, and have to convert them to numeric to meaningfully multiply them.
+
+
+# Question 2
+
+```{r}
+data("penguins", package = "palmerpenguins")
+```
+This seems to be a data set describing penguin characteristics such as bill length/depth, flipper length, and body mass of different species of penguins, identifying which island said penguins come from. Data on sex (either male or female) of penguins and year that the data on each penguin was recorded is also available in the data set.
+
+```{r}
+ncol(penguins)
+nrow(penguins)
+```
+
+There are 8 columns and 344 rows in the penguin data set.
+
+```{r flipper_length_mean}
+mean((pull(penguins, flipper_length_mm)), na.rm=TRUE)
+```
+
+The mean flipper length of penguins in the data set (excluding those without flipper length data) is 200.9152.
+
+```{r ggplot}
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) + geom_point()
+ggsave("scatter_plot.pdf", height = 4, width = 8)
+```
 
